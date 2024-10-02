@@ -1,0 +1,28 @@
+services:
+  optimal_power_time_calculator_web:
+    build:
+        context: .
+        dockerfile: Dockerfile
+        target: development
+    container_name: optimal_power_time_calculator_web
+    stop_signal: SIGINT
+    ports:
+      - "8000:8000"
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
+
+    volumes:
+      - .:/app
+
+#    entrypoint: ''
+
+  optimal_power_time_calculator:
+    image: rasmus256docker/optimalpowertimecalculator:20241001-103653
+    container_name: optimal_power_time_calculator
+    ports:
+      - "8001:80"
+    environment:
+      - PRICE_CLASS=DK2
+    stop_signal: SIGINT
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
