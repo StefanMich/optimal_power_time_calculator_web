@@ -20,71 +20,13 @@ body, html {
     background-color: #f0f0f0;
 }
 
-.container {
-    display: grid;
-    grid-template-rows: repeat(auto-fit, 10vw);
-    gap: 2vw;
-    width: 80vw;
-    height: 80vh;
-
-}
-
-.number {
-    justify-content: left;
-    align-items: center;
-    background-color: #4CAF50;
-    color: white;
-    font-size: 3vw; /* Responsive font size based on viewport width */
-    font-weight: bold;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-    padding: 1vw;
-    transition: transform 0.3s ease;
-    height: fit-content;
-}
-
-.number:hover {
-    transform: scale(1.05);
-}
-
-.combined {
-    position: relative;
-    background-color: #f0f0f0;
-    color: black;
-    font-size: 3vw;
-    font-weight: bold;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 1vw;
-    height: fit-content;
-}
-
-.progress-bar {
-    width: 100%;
-    background-color: #ddd;
-    border-radius: 10px;
-    overflow: hidden;
-    height: 3vw;
-    margin-bottom: 1vw;
-}
-
-.progress {
-    height: 100%;
-    width: 0;
-    background-color: red;
-    transition: width 0.3s ease, background-color 0.3s ease;
-}
-
 .stats {
     display: block;
     justify-content: space-between;
-}
-
-.small {
-    justify-content: right;
-    font-size: 2vw;
-    color: #666;
+    margin: 3vw;
+    padding: 1vw;
+    border-radius: 10px;
+    border: 2px solid grey;
 }
 
     </style>
@@ -92,23 +34,25 @@ body, html {
 
 <body>
 
+{% for optimal_time in optimal_times %}
 <div class="stats">
     <div>
-        <strong>Appliance:</strong> <span id="name">{{ price.name }}</span>
+        <strong>Appliance:</strong> <span id="name">{{ optimal_time.name }}</span>
     </div>
     <div>
-        <strong>From:</strong> <span id="from_dt">{{ price.from_dt | date:"Y-m-d H:i:s"}}</span>
+        <strong>From:</strong> <span id="from_dt">{{ optimal_time.from_dt | date:"Y-m-d H:i:s"}}</span>
     </div>
     <div>
-        <strong>To:</strong> <span id="to_dt">{{ price.to_dt | date:"Y-m-d H:i:s"}}</span>
+        <strong>To:</strong> <span id="to_dt">{{ optimal_time.to_dt | date:"Y-m-d H:i:s"}}</span>
     </div>
     <div>
-        <strong>Average price:</strong> <span id="price">{{ price.price | floatformat:3}} kW</span>
+        <strong>Average price:</strong> <span id="price">{{ optimal_time.price | floatformat:3}} kW</span>
     </div>
     <div>
-        <strong>Suboptimal Price Multiplier:</strong> <span id="suboptimal_price_multiplier">{{ price.suboptimal_price_multiplier | floatformat:3}}</span>
+        <strong>Suboptimal Price Multiplier:</strong> <span id="suboptimal_price_multiplier">{{ optimal_time.suboptimal_price_multiplier | floatformat:3}}</span>
     </div>
 </div>
+{% endfor %}
 
 </body>
 
