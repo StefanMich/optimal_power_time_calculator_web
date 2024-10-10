@@ -17,9 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from web.views import index
+from web.views import (
+    index,
+    optimal_power_for_house,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index),
+    path('house/<int:house_id>/', optimal_power_for_house),
 ]

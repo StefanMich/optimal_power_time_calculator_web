@@ -13,7 +13,7 @@
 
 body, html {
     height: 100%;
-    display: flex;
+    display: block;
     justify-content: center;
     align-items: start;
     padding: 2vw;
@@ -29,28 +29,39 @@ body, html {
     border: 2px solid grey;
 }
 
+.program {
+    border: 2px solid grey;
+}
+
     </style>
 </head>
 
 <body>
 
-{% for optimal_time in optimal_times %}
+{% for appliance_name, programs in appliances.items %}
 <div class="stats">
     <div>
-        <strong>Appliance:</strong> <span id="name">{{ optimal_time.name }}</span>
+        <strong>Appliance:</strong> <span id="name">{{ appliance_name }}</span>
     </div>
-    <div>
-        <strong>From:</strong> <span id="from_dt">{{ optimal_time.from_dt | date:"Y-m-d H:i:s"}}</span>
-    </div>
-    <div>
-        <strong>To:</strong> <span id="to_dt">{{ optimal_time.to_dt | date:"Y-m-d H:i:s"}}</span>
-    </div>
-    <div>
-        <strong>Average price:</strong> <span id="price">{{ optimal_time.price | floatformat:3}} kW</span>
-    </div>
-    <div>
-        <strong>Suboptimal Price Multiplier:</strong> <span id="suboptimal_price_multiplier">{{ optimal_time.suboptimal_price_multiplier | floatformat:3}}</span>
-    </div>
+    {% for program in programs %}
+        <div class="program">
+            <div>
+                <strong>Program:</strong> <span id="program">{{ program.program_name }}</span>
+            </div>
+            <div>
+                <strong>From:</strong> <span id="from_dt">{{ program.from_dt | date:"Y-m-d H:i:s"}}</span>
+            </div>
+            <div>
+                <strong>To:</strong> <span id="to_dt">{{ program.to_dt | date:"Y-m-d H:i:s"}}</span>
+            </div>
+            <div>
+                <strong>Average price:</strong> <span id="price">{{ program.price | floatformat:3}} kr/kWh</span>
+            </div>
+            <div>
+                <strong>Suboptimal Price Multiplier:</strong> <span id="suboptimal_price_multiplier">{{ program.suboptimal_price_multiplier | floatformat:3}}</span>
+            </div>
+        </div>
+    {% endfor %}
 </div>
 {% endfor %}
 
