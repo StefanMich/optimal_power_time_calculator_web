@@ -4,34 +4,47 @@
     <title>Optimal power time calculator</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
 <style>
-        * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-body, html {
-    height: 100%;
-    display: block;
-    justify-content: center;
-    align-items: start;
-    padding: 2vw;
-    background-color: #f0f0f0;
-}
+    body, html {
+        height: 100%;
+        display: block;
+        justify-content: center;
+        align-items: start;
+        padding: 2vw;
+        background-color: #f0f0f0;
+        font-family: Arial, sans-serif;
+    }
 
-.programs-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1vw;
-}
+    .programs-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1vw;
+    }
 
-.program {
-    border: 2px solid grey;
-    padding: 1vw;
-}
+    .program {
+        border: 2px solid #ccc;
+        padding: 1vw;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-    </style>
+    h2 {
+        color: #333;
+    }
+
+    .program strong {
+        color: #555;
+    }
+</style>
+    
 </head>
 
 <body>
@@ -45,9 +58,20 @@ body, html {
                 <strong>Program:</strong> <span id="program">{{ program.program_name }}</span>
             </div>
             <div>
-                From <span id="from_dt">{{ program.from_datetime | date:"Y-m-d H:i"}}</span>
-                to <span id="to_dt">{{ program.to_datetime | date:"Y-m-d H:i"}}</span>
-            </div>
+    <strong>Should run: </strong>From <span id="from_dt">
+    {% if program.from_datetime.date != program.to_datetime.date or program.from_datetime.date != today %}
+        {{ program.from_datetime | date:"Y-m-d H:i"}}
+    {% else %}
+        {{ program.from_datetime | date:"H:i"}}
+    {% endif %}
+    </span> to <span id="to_dt">
+    {% if program.from_datetime.date != program.to_datetime.date or program.to_datetime.date != today %}
+        {{ program.to_datetime | date:"Y-m-d H:i"}}
+    {% else %}
+        {{ program.to_datetime | date:"H:i"}}
+    {% endif %}
+    </span>
+</div>
             <div>
                 <strong>Hours to start:</strong> <span id="hours_to_start">{{ program.hours_to_start | floatformat:2 }}</span>
             </div>
