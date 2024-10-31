@@ -49,10 +49,11 @@ body, html {
                 <strong>Program:</strong> <span id="program">{{ program.program_name }}</span>
             </div>
             <div>
-                <strong>From:</strong> <span id="from_dt">{{ program.from_dt | date:"Y-m-d H:i:s"}}</span>
+                From <span id="from_dt">{{ program.from_datetime | date:"Y-m-d H:i"}}</span>
+                to <span id="to_dt">{{ program.to_datetime | date:"Y-m-d H:i"}}</span>
             </div>
             <div>
-                <strong>To:</strong> <span id="to_dt">{{ program.to_dt | date:"Y-m-d H:i:s"}}</span>
+                <strong>Hours to start:</strong> <span id="hours_to_start">{{ program.hours_to_start | floatformat:2 }}</span>
             </div>
             <div>
                 <strong>Average price:</strong> <span id="price">{{ program.price | floatformat:3}} kr/kWh</span>

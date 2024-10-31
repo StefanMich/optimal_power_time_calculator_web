@@ -4,6 +4,7 @@ from datetime import datetime
 from decimal import Decimal
 
 from django.shortcuts import render
+from django.utils import timezone
 
 import requests
 
@@ -44,16 +45,21 @@ def optimal_power_for_house(request, house_id):
 @dataclass
 class OptimalTimeAppliance:
     program_name: str
-    from_dt: datetime
-    to_dt: datetime
+    from_datetime: datetime
+    to_datetime: datetime
     price: Decimal
     suboptimal_price_multiplier: Decimal
 
+    @property
+    def hours_to_start(self):
+        return (self.from_datetime - timezone.now()).seconds / 3600
+
 def json_to_optimal_time_appliance(program_name, json):
+    print(json['fromTs'])
     return OptimalTimeAppliance(
         program_name=program_name,
-        from_dt=datetime.fromisoformat(json['fromTs']),
-        to_dt=datetime.fromisoformat(json['toTs']),
+        from_datetime=datetime.fromisoformat(json['fromTs']),
+        to_datetime=datetime.fromisoformat(json['toTs']),
         price=Decimal(json['price']),
         suboptimal_price_multiplier=Decimal(json['suboptimalPriceMultiplier']),
     )
