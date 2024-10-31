@@ -20,17 +20,15 @@ body, html {
     background-color: #f0f0f0;
 }
 
-.stats {
-    display: block;
-    justify-content: space-between;
-    margin: 3vw;
-    padding: 1vw;
-    border-radius: 10px;
-    border: 2px solid grey;
+.programs-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1vw;
 }
 
 .program {
     border: 2px solid grey;
+    padding: 1vw;
 }
 
     </style>
@@ -39,10 +37,8 @@ body, html {
 <body>
 
 {% for appliance_name, programs in appliances.items %}
-<div class="stats">
-    <div>
-        <strong>Appliance:</strong> <span id="name">{{ appliance_name }}</span>
-    </div>
+    <h2>{{ appliance_name }}</h2>
+    <div class="programs-container">
     {% for program in programs %}
         <div class="program">
             <div>
@@ -63,7 +59,7 @@ body, html {
             </div>
         </div>
     {% endfor %}
-</div>
+    </div>
 {% endfor %}
 
 </body>
