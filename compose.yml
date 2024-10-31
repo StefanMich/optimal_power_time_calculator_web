@@ -10,14 +10,15 @@ services:
       - "8000:8000"
     stdin_open: true # docker run -i
     tty: true # docker run -t
-
+    depends_on:
+      - optimal_power_time_calculator
     volumes:
       - .:/app
 
 #    entrypoint: ''
 
   optimal_power_time_calculator:
-    image: rasmus256docker/optimalpowertimecalculator:20241009-153151
+    image: rasmus256docker/optimalpowertimecalculator:20241029-092620
     container_name: optimal_power_time_calculator
     ports:
       - "8001:80"
