@@ -82,7 +82,7 @@ ENTRYPOINT ["/app/entrypoint.sh"]
 FROM python-base AS production
 ENV FASTAPI_ENV=production
 COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
-COPY optimal_power_time_calculator /app/optimal_power_time_calculator/
+COPY . /app/
 WORKDIR /app
 
 CMD ["gunicorn", "--reload", "--bind", "0.0.0.0:8000", "optimal_power_time_calculator.wsgi"]
