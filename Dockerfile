@@ -49,7 +49,7 @@ WORKDIR $PYSETUP_PATH
 COPY poetry.lock pyproject.toml ./
 
 # install runtime deps - uses $POETRY_VIRTUALENVS_IN_PROJECT internally
-#RUN poetry install --only main
+RUN poetry install --only main
 
 
 # `development` image is used during development / testing
@@ -85,4 +85,4 @@ COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
 COPY optimal_power_time_calculator /app/optimal_power_time_calculator/
 WORKDIR /app
 
-CMD ["gunicorn", "--reload", "--bind", "0.0.0.0:8000", "optimal_power_time_calculator.main:app"]
+CMD ["gunicorn", "--reload", "--bind", "0.0.0.0:8000", "optimal_power_time_calculator.wsgi"]

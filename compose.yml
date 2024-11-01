@@ -18,7 +18,7 @@ services:
 #    entrypoint: ''
 
   optimal_power_time_calculator:
-    image: rasmus256docker/optimalpowertimecalculator:20241029-092620
+    image: rasmus256docker/optimalpowertimecalculator:20241031-220616
     container_name: optimal_power_time_calculator
     ports:
       - "8001:80"
