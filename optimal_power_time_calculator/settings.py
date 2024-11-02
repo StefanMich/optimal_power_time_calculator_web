@@ -72,10 +72,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'optimal_power_time_calculator.wsgi.application'
 
+path = os.getenv('DATABASE_PATH', BASE_DIR / 'db.sqlite3')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': path,
     }
 }
 
