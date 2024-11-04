@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-6h1qg=r2a*!pa80qzy*y(xlgl1mdk3^a5_*@!a6ha469(1i*zn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS','').split(',')
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS','127.0.0.1').split(',')
 if origins := os.getenv('CSRF_TRUSTED_ORIGINS',''):
     CSRF_TRUSTED_ORIGINS = origins.split(',')
 CSRF_COOKIE_SECURE = True
