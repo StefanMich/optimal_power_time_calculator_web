@@ -1,5 +1,5 @@
 services:
-  optimal_power_time_calculator_web:
+  optimal-power-time-calculator-web:
     build:
         context: .
         dockerfile: Dockerfile
@@ -11,13 +11,13 @@ services:
     stdin_open: true # docker run -i
     tty: true # docker run -t
     depends_on:
-      - optimal_power_time_calculator
+      - optimal-power-time-calculator
     volumes:
       - .:/app
 
 #    entrypoint: ''
 
-  optimal_power_time_calculator:
+  optimal-power-time-calculator:
     image: rasmus256docker/optimalpowertimecalculator:20241031-220616
     container_name: optimal_power_time_calculator
     ports:

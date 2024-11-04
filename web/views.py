@@ -12,10 +12,10 @@ from web.models import House
 
 
 def index(request):
-    response1 = requests.get('http://optimal_power_time_calculator:80/api/next-optimal-hour?numHoursToForecast=3h35m')
+    response1 = requests.get('http://optimal-power-time-calculator:80/api/next-optimal-hour?numHoursToForecast=3h35m')
     price1 = json_to_optimal_time_appliance("Test", response1.json()['price'])
 
-    response = requests.get('http://optimal_power_time_calculator:80/api/next-optimal-hour?numHoursToForecast=1h35m')
+    response = requests.get('http://optimal-power-time-calculator:80/api/next-optimal-hour?numHoursToForecast=1h35m')
     price = json_to_optimal_time_appliance("Test", response.json()['price'])
 
     return render(request, 'index.html', {'optimal_times': [price, price1]})
