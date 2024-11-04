@@ -11,11 +11,13 @@ import requests
 from web.models import House
 
 
+base_url = 'http://optimal-power-time-calculator:80'
 def index(request):
-    response1 = requests.get('http://optimal-power-time-calculator:80/api/next-optimal-hour?numHoursToForecast=3h35m')
+
+    response1 = requests.get(f'{base_url}/api/next-optimal-hour?numHoursToForecast=3h35m')
     price1 = json_to_optimal_time_appliance("Test", response1.json()['price'])
 
-    response = requests.get('http://optimal-power-time-calculator:80/api/next-optimal-hour?numHoursToForecast=1h35m')
+    response = requests.get(f'{base_url}/api/next-optimal-hour?numHoursToForecast=1h35m')
     price = json_to_optimal_time_appliance("Test", response.json()['price'])
 
     return render(request, 'index.html', {'optimal_times': [price, price1]})
@@ -29,7 +31,7 @@ def optimal_power_for_house(request, house_id):
         for program in appliance.program_set.all():
             hours_and_minutes = f'{program.time_in_minutes // 60}h{program.time_in_minutes % 60}m'
             print(hours_and_minutes)
-            response = requests.get(f'http://optimal_power_time_calculator:80/api/next-optimal-hour?numHoursToForecast={hours_and_minutes}')
+            response = requests.get(f'{base_url}/api/next-optimal-hour?numHoursToForecast={hours_and_minutes}')
             print(response.json())
 
             optimal_time = json_to_optimal_time_appliance(program.name, response.json()['price'])
