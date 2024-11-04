@@ -84,5 +84,6 @@ ENV FASTAPI_ENV=production
 COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
 COPY . /app/
 WORKDIR /app
+RUN python manage.py collectstatic --noinput
 
 CMD ["gunicorn", "--reload", "--bind", "0.0.0.0:8000", "optimal_power_time_calculator.wsgi"]
