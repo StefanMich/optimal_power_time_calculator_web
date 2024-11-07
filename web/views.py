@@ -20,7 +20,7 @@ def index(request):
     response = requests.get(f'{base_url}/api/next-optimal-hour?numHoursToForecast=1h35m')
     price = json_to_optimal_time_appliance("Test", response.json()['price'])
 
-    return render(request, 'index.html', {'optimal_times': [price, price1]})
+    return render(request, 'web/index.html', {'optimal_times': [price, price1]})
 
 
 def optimal_power_for_house(request, house_id):
@@ -42,7 +42,7 @@ def optimal_power_for_house(request, house_id):
         print(appliance)
         for program in programs:
             print(program.program_name)
-    return render(request, 'index.html', {'appliances': appliances})
+    return render(request, 'web/index.html', {'appliances': appliances})
 
 @dataclass
 class OptimalTimeAppliance:
@@ -57,7 +57,6 @@ class OptimalTimeAppliance:
         return (self.from_datetime - timezone.now()).seconds / 3600
 
 def json_to_optimal_time_appliance(program_name, json):
-    print(json['fromTs'])
     return OptimalTimeAppliance(
         program_name=program_name,
         from_datetime=datetime.fromisoformat(json['fromTs']),
