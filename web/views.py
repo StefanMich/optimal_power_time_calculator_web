@@ -30,9 +30,8 @@ def optimal_power_for_house(request, house_id):
     for appliance in house.appliance_set.all():
         for program in appliance.program_set.all():
             hours_and_minutes = f'{program.time_in_minutes // 60}h{program.time_in_minutes % 60}m'
-            print(hours_and_minutes)
             response = requests.get(f'{base_url}/api/next-optimal-hour?numHoursToForecast={hours_and_minutes}')
-            print(response.json())
+            response.raise_for_status()
 
             optimal_time = json_to_optimal_time_appliance(program.name, response.json()['price'])
             appliances[appliance.name].append(optimal_time)
