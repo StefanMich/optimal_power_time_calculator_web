@@ -19,23 +19,29 @@ def index(request):
 
 def optimal_power_for_house(request, house_id):
     house = House.objects.get(pk=house_id)
-
     appliances = defaultdict(list)
-    for appliance in house.appliance_set.all():
-        for program in appliance.program_set.all():
-            hours_and_minutes = f'{program.time_in_minutes // 60}h{program.time_in_minutes % 60}m'
-            response = requests.get(f'{base_url}/api/next-optimal-hour?numHoursToForecast={hours_and_minutes}')
-            response.raise_for_status()
+    error_message = None
 
-            optimal_time = json_to_optimal_time_appliance(program.name, response.json()['price'])
-            appliances[appliance.name].append(optimal_time)
+    try:
+        for appliance in house.appliance_set.all():
+            for program in appliance.program_set.all():
+                hours_and_minutes = f'{program.time_in_minutes // 60}h{program.time_in_minutes % 60}m'
+                response = requests.get(f'{base_url}/api/next-optimal-hour?numHoursToForecast={hours_and_minutes}&glnNumber={house.gln_number}')
+                try:
+                    response.raise_for_status()
+                    optimal_time = json_to_optimal_time_appliance(program.name, response.json()['price'])
+                    appliances[appliance.name].append(optimal_time)
+                except requests.exceptions.HTTPError as e:
+                    error_message = f"API Error: {e.response.text}"
+                    break
+    except Exception as e:
+        error_message = f"An error occurred: {str(e)}"
 
     appliances.default_factory = None
-    for appliance, programs in appliances.items():
-        print(appliance)
-        for program in programs:
-            print(program.program_name)
-    return render(request, 'web/house.html', {'appliances': appliances})
+    return render(request, 'web/house.html', {
+        'appliances': appliances,
+        'error_message': error_message
+    })
 
 @dataclass
 class OptimalTimeAppliance:

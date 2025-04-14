@@ -49,6 +49,11 @@
 
 <body>
 
+{% if error_message %}
+<div class="error-message">
+    {{ error_message }}
+</div>
+{% endif %}
 
 {% for appliance_name, programs in appliances.items %}
     <h2>{{ appliance_name }}</h2>
