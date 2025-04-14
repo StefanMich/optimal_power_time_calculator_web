@@ -16,14 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
-from web.views import (
-    index,
-    optimal_power_for_house,
-)
+from web import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index),
-    path('house/<int:house_id>/', optimal_power_for_house),
+    path('', views.index),
+    path('house/<int:house_id>/', views.optimal_power_for_house, name='optimal_power_for_house'),
 ]

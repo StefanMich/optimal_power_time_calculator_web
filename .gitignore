@@ -1,3 +1,4 @@
 .idea/
 compose-override.yml
 static/
+db.sqlite3
