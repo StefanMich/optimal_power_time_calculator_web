@@ -132,6 +132,39 @@
                 };
             };
 
+            const updateUrlWithLatestFinish = (url, latestFinish) => {
+                const nextUrl = new URL(url);
+                if (latestFinish) {
+                    nextUrl.searchParams.set('latest_finish', latestFinish);
+                } else {
+                    nextUrl.searchParams.delete('latest_finish');
+                }
+                return nextUrl;
+            };
+
+            const updateHouseLinks = (latestFinish) => {
+                const links = document.querySelectorAll('a.house-link');
+                links.forEach((link) => {
+                    const nextUrl = updateUrlWithLatestFinish(link.href, latestFinish);
+                    link.href = nextUrl.toString();
+                });
+            };
+
+            const maybeReloadHousePage = (latestFinish) => {
+                if (!window.location.pathname.startsWith('/house/')) {
+                    return false;
+                }
+                const nextUrl = updateUrlWithLatestFinish(
+                    window.location.href,
+                    latestFinish,
+                );
+                if (nextUrl.toString() === window.location.href) {
+                    return false;
+                }
+                window.location.assign(nextUrl.toString());
+                return true;
+            };
+
             const populateSelect = (select, max) => {
                 select.innerHTML = '';
                 for (let i = 0; i <= max; i += 1) {
@@ -150,6 +183,8 @@
             valueSpan.textContent = currentValue;
             hourSelect.value = pad(initialTime.hour);
             minuteSelect.value = pad(initialTime.minute);
+            updateHouseLinks(currentValue);
+            maybeReloadHousePage(currentValue);
 
             button.addEventListener('click', () => {
                 const storedValue = sessionStorage.getItem(storageKey) || defaultValue;
@@ -175,6 +210,10 @@
                 const newValue = toTimeValue(hourSelect.value, minuteSelect.value);
                 sessionStorage.setItem(storageKey, newValue);
                 valueSpan.textContent = newValue;
+                updateHouseLinks(newValue);
+                if (maybeReloadHousePage(newValue)) {
+                    return;
+                }
                 if (typeof dialog.close === 'function') {
                     dialog.close();
                 } else {
