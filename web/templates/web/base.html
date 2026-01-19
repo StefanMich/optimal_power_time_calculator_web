@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <title>{% block title %}Optimal power time calculator{% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .top-menu {
+            align-items: center;
+            background: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-between;
+            margin: 0;
+            padding: 8px 16px;
+        }
+
+        .top-menu-title {
+            color: #333;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .latest-finish-button {
+            background: #f6f6f6;
+            border: 1px solid #d0d0d0;
+            border-radius: 6px;
+            color: #333;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 6px 12px;
+        }
+
+        .latest-finish-button:hover {
+            background: #efefef;
+        }
+
+        .latest-finish-dialog {
+            border: 1px solid #d0d0d0;
+            border-radius: 10px;
+            inset: 0;
+            margin: auto;
+            padding: 16px;
+            position: fixed;
+            width: min(320px, 90vw);
+        }
+
+        .latest-finish-dialog::backdrop {
+            background: rgba(0, 0, 0, 0.25);
+        }
+
+        .latest-finish-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .latest-finish-inputs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .latest-finish-inputs select {
+            flex: 1;
+        }
+
+        .latest-finish-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .page-content {
+            padding: 2vw;
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="top-menu">
+        <div class="top-menu-title">Optimal power time calculator</div>
+        <button class="latest-finish-button" id="latestFinishButton" type="button">
+            Latest finish: <span id="latestFinishValue">06:00</span>
+        </button>
+    </div>
+
+    <dialog class="latest-finish-dialog" id="latestFinishDialog">
+        <form method="dialog">
+            <div class="latest-finish-field">
+                <label for="latestFinishHour">Latest finish time</label>
+                <div class="latest-finish-inputs">
+                    <select id="latestFinishHour"></select>
+                    <span>:</span>
+                    <select id="latestFinishMinute"></select>
+                </div>
+            </div>
+            <div class="latest-finish-actions">
+                <button type="button" id="latestFinishCancel">Cancel</button>
+                <button type="button" id="latestFinishSave">Save</button>
+            </div>
+        </form>
+    </dialog>
+
+    <main class="page-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const storageKey = 'latestFinishTime';
+            const defaultValue = '06:00';
+            const button = document.getElementById('latestFinishButton');
+            const valueSpan = document.getElementById('latestFinishValue');
+            const dialog = document.getElementById('latestFinishDialog');
+            const hourSelect = document.getElementById('latestFinishHour');
+            const minuteSelect = document.getElementById('latestFinishMinute');
+            const cancelButton = document.getElementById('latestFinishCancel');
+            const saveButton = document.getElementById('latestFinishSave');
+
+            const pad = (value) => String(value).padStart(2, '0');
+            const toTimeValue = (hour, minute) => `${pad(hour)}:${pad(minute)}`;
+            const parseTime = (value) => {
+                const [hour, minute] = value.split(':');
+                return {
+                    hour: Number.parseInt(hour || '0', 10),
+                    minute: Number.parseInt(minute || '0', 10),
+                };
+            };
+
+            const populateSelect = (select, max) => {
+                select.innerHTML = '';
+                for (let i = 0; i <= max; i += 1) {
+                    const option = document.createElement('option');
+                    option.value = pad(i);
+                    option.textContent = pad(i);
+                    select.appendChild(option);
+                }
+            };
+
+            populateSelect(hourSelect, 23);
+            populateSelect(minuteSelect, 59);
+
+            const currentValue = sessionStorage.getItem(storageKey) || defaultValue;
+            const initialTime = parseTime(currentValue);
+            valueSpan.textContent = currentValue;
+            hourSelect.value = pad(initialTime.hour);
+            minuteSelect.value = pad(initialTime.minute);
+
+            button.addEventListener('click', () => {
+                const storedValue = sessionStorage.getItem(storageKey) || defaultValue;
+                const storedTime = parseTime(storedValue);
+                hourSelect.value = pad(storedTime.hour);
+                minuteSelect.value = pad(storedTime.minute);
+                if (typeof dialog.showModal === 'function') {
+                    dialog.showModal();
+                } else {
+                    dialog.setAttribute('open', 'open');
+                }
+            });
+
+            cancelButton.addEventListener('click', () => {
+                if (typeof dialog.close === 'function') {
+                    dialog.close();
+                } else {
+                    dialog.removeAttribute('open');
+                }
+            });
+
+            saveButton.addEventListener('click', () => {
+                const newValue = toTimeValue(hourSelect.value, minuteSelect.value);
+                sessionStorage.setItem(storageKey, newValue);
+                valueSpan.textContent = newValue;
+                if (typeof dialog.close === 'function') {
+                    dialog.close();
+                } else {
+                    dialog.removeAttribute('open');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

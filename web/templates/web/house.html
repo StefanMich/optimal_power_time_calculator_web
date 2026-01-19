@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Optimal power time calculator</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends 'web/base.html' %}
 
+{% block title %}Optimal power time calculator{% endblock %}
+
+{% block content %}
 <style>
     * {
         margin: 0;
@@ -17,7 +15,6 @@
         display: block;
         justify-content: center;
         align-items: start;
-        padding: 2vw;
         background-color: #f0f0f0;
         font-family: Arial, sans-serif;
     }
@@ -45,10 +42,6 @@
     }
 </style>
 
-</head>
-
-<body>
-
 {% if error_message %}
 <div class="error-message">
     {{ error_message }}
@@ -64,35 +57,36 @@
                 <strong>Program:</strong> <span id="program">{{ program.program_name }}</span>
             </div>
             <div>
-    <strong>Should run: </strong>From <span id="from_dt">
-    {% if program.from_datetime.date != program.to_datetime.date or program.from_datetime.date != today %}
-        {{ program.from_datetime | date:"Y-m-d H:i"}}
-    {% else %}
-        {{ program.from_datetime | date:"H:i"}}
-    {% endif %}
-    </span> to <span id="to_dt">
-    {% if program.from_datetime.date != program.to_datetime.date or program.to_datetime.date != today %}
-        {{ program.to_datetime | date:"Y-m-d H:i"}}
-    {% else %}
-        {{ program.to_datetime | date:"H:i"}}
-    {% endif %}
-    </span>
-</div>
-            <div>
-                <strong>Hours to start:</strong> <span id="hours_to_start">{{ program.hours_to_start | floatformat:2 }}</span>
+                <strong>Should run: </strong>From <span id="from_dt">
+                {% if program.from_datetime.date != program.to_datetime.date or program.from_datetime.date != today %}
+                    {{ program.from_datetime | date:"Y-m-d H:i"}}
+                {% else %}
+                    {{ program.from_datetime | date:"H:i"}}
+                {% endif %}
+                </span> to <span id="to_dt">
+                {% if program.from_datetime.date != program.to_datetime.date or program.to_datetime.date != today %}
+                    {{ program.to_datetime | date:"Y-m-d H:i"}}
+                {% else %}
+                    {{ program.to_datetime | date:"H:i"}}
+                {% endif %}
+                </span>
             </div>
             <div>
-                <strong>Average price:</strong> <span id="price">{{ program.price | floatformat:3}} kr/kWh</span>
+                <strong>Hours to start:</strong>
+                <span id="hours_to_start">{{ program.hours_to_start | floatformat:2 }}</span>
             </div>
             <div>
-                <strong>Suboptimal Price Multiplier:</strong> <span id="suboptimal_price_multiplier">{{ program.suboptimal_price_multiplier | floatformat:3}}</span>
+                <strong>Average price:</strong>
+                <span id="price">{{ program.price | floatformat:3}} kr/kWh</span>
+            </div>
+            <div>
+                <strong>Suboptimal Price Multiplier:</strong>
+                <span id="suboptimal_price_multiplier">
+                    {{ program.suboptimal_price_multiplier | floatformat:3}}
+                </span>
             </div>
         </div>
     {% endfor %}
     </div>
 {% endfor %}
-
-</body>
-
-
-</html>
+{% endblock %}
