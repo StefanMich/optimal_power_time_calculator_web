@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
     path('house/<int:house_id>/', views.optimal_power_for_house, name='optimal_power_for_house'),
+    path('appliance/<int:appliance_id>/', views.appliance_overview, name='appliance_overview'),
 ]

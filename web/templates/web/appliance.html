@@ -1,0 +1,134 @@
+{% extends 'web/base.html' %}
+
+{% block title %}{{ appliance.name }}{% endblock %}
+
+{% block content %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body, html {
+        height: 100%;
+        display: block;
+        justify-content: center;
+        align-items: start;
+        background-color: #f0f0f0;
+        font-family: Arial, sans-serif;
+    }
+
+    .appliance-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem 2rem;
+    }
+
+    .appliance-title {
+        font-size: 2rem;
+        color: #333;
+    }
+
+    .nav-arrow {
+        text-decoration: none;
+        color: #333;
+        font-size: 2rem;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        background: #fff;
+        border: 2px solid #ccc;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .nav-placeholder {
+        width: 3.5rem;
+        height: 3.5rem;
+    }
+
+    .program-overview {
+        margin: 0 2rem 2rem;
+        padding: 2rem;
+        background-color: #fff;
+        border-radius: 16px;
+        border: 2px solid #ccc;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+        font-size: 1.2rem;
+    }
+
+    .program-row {
+        margin-top: 1rem;
+    }
+</style>
+
+{% if error_message %}
+<div class="error-message">
+    {{ error_message }}
+</div>
+{% endif %}
+
+<div class="appliance-header">
+    {% if prev_program_id %}
+        <a class="nav-arrow" href="?program_id={{ prev_program_id }}">&#8592;</a>
+    {% else %}
+        <div class="nav-placeholder"></div>
+    {% endif %}
+    <div class="appliance-title">{{ appliance.name }}</div>
+    {% if next_program_id %}
+        <a class="nav-arrow" href="?program_id={{ next_program_id }}">&#8594;</a>
+    {% else %}
+        <div class="nav-placeholder"></div>
+    {% endif %}
+</div>
+
+{% if program %}
+    <div class="program-overview">
+        <div class="program-row">
+            <strong>Program:</strong>
+            <span id="program">{{ program.program_name }}</span>
+        </div>
+        <div class="program-row">
+            <strong>Should run: </strong>From <span id="from_dt">
+            {% if program.from_datetime.date != program.to_datetime.date %}
+                {{ program.from_datetime | date:"Y-m-d H:i"}}
+            {% elif program.from_datetime.date != today %}
+                {{ program.from_datetime | date:"Y-m-d H:i"}}
+            {% else %}
+                {{ program.from_datetime | date:"H:i"}}
+            {% endif %}
+            </span> to <span id="to_dt">
+            {% if program.from_datetime.date != program.to_datetime.date %}
+                {{ program.to_datetime | date:"Y-m-d H:i"}}
+            {% elif program.to_datetime.date != today %}
+                {{ program.to_datetime | date:"Y-m-d H:i"}}
+            {% else %}
+                {{ program.to_datetime | date:"H:i"}}
+            {% endif %}
+            </span>
+        </div>
+        <div class="program-row">
+            <strong>Hours to start:</strong>
+            <span id="hours_to_start">
+                {{ program.hours_to_start | floatformat:2 }}
+            </span>
+        </div>
+        <div class="program-row">
+            <strong>Average price:</strong>
+            <span id="price">
+                {{ program.price | floatformat:3}} kr/kWh
+            </span>
+        </div>
+        <div class="program-row">
+            <strong>Suboptimal Price Multiplier:</strong>
+            <span id="suboptimal_price_multiplier">
+                {{ program.suboptimal_price_multiplier | floatformat:3}}
+            </span>
+        </div>
+    </div>
+{% else %}
+    <div class="program-overview">
+        <div>No programs available.</div>
+    </div>
+{% endif %}
+{% endblock %}
