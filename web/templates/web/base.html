@@ -150,8 +150,8 @@
                 });
             };
 
-            const maybeReloadHousePage = (latestFinish) => {
-                if (!window.location.pathname.startsWith('/house/')) {
+            const maybeReloadCurrentPage = (latestFinish) => {
+                if (window.location.pathname === '/') {
                     return false;
                 }
                 const nextUrl = updateUrlWithLatestFinish(
@@ -184,7 +184,7 @@
             hourSelect.value = pad(initialTime.hour);
             minuteSelect.value = pad(initialTime.minute);
             updateHouseLinks(currentValue);
-            maybeReloadHousePage(currentValue);
+            maybeReloadCurrentPage(currentValue);
 
             button.addEventListener('click', () => {
                 const storedValue = sessionStorage.getItem(storageKey) || defaultValue;
@@ -211,7 +211,7 @@
                 sessionStorage.setItem(storageKey, newValue);
                 valueSpan.textContent = newValue;
                 updateHouseLinks(newValue);
-                if (maybeReloadHousePage(newValue)) {
+                if (maybeReloadCurrentPage(newValue)) {
                     return;
                 }
                 if (typeof dialog.close === 'function') {
