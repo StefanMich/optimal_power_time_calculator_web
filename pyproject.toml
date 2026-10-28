@@ -7,7 +7,7 @@ license = "MIT"
 package-mode = false
 
 [tool.poetry.dependencies]
-gunicorn = "^23.0.0"
+gunicorn = ">=23,<27"
 python = "^3.12"
 django = ">=5.1.1,<7.0.0"
 requests = "^2.32.3"
