@@ -80,6 +80,7 @@ ENTRYPOINT ["/app/entrypoint.sh"]
 
 # `production` image used for runtime
 FROM python-base AS production
+LABEL org.opencontainers.image.source="https://github.com/StefanMich/optimal_power_time_calculator_web"
 ENV FASTAPI_ENV=production
 COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
 COPY . /app/
